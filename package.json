@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "acorn": "^4.0.4",
+    "amd-name-resolver": "^0.0.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "fixturify": "^0.3.2",
+    "mocha": "^3.2.0"
+  },
+  "scripts": {
+    "test": "mocha tests",
+    "test:debug": "mocha debug tests"
+  },
+  "name": "mr-dep-walk",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stefanpenner/depwalk.git"
+  },
+  "author": "Stefan Penner <stefan.penner@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stefanpenner/depwalk/issues"
+  },
+  "homepage": "https://github.com/stefanpenner/depwalk#readme",
+  "description": ""
+}
