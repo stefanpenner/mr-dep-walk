@@ -37,4 +37,23 @@ import y from 'b/c';`;
       expect(depsFromSrouce(D)).to.eql(['foo']);
     })
   });
-})
+
+
+  describe('ES mixed', function() {
+    it('define then es6', function() {
+      expect(depsFromSrouce(`
+define('foo', ['bar'], function() { });
+import x from 'a';
+import y from 'b/c';
+      `)).to.eql(['bar']);
+    });
+
+    it('es6 then define', function() {
+      expect(depsFromSrouce(`
+import x from 'a';
+import y from 'b/c';
+define('foo', ['bar'], function() { });
+      `)).to.eql(['a', 'b/c']);
+    });
+  });
+});
