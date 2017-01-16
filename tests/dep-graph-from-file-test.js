@@ -45,6 +45,15 @@ describe('.depFilesFromFile', function() {
         'd.js',
       ]);
     });
+
+    it('ignores external', function() {
+      expect(depFilesFromFile(ROOT + 'es5', {
+        entry: 'foo.js',
+        external: ['b/c'],
+      })).to.eql([
+        'a.js'
+      ]);
+    });
   });
 
   describe('ES6', function() {
