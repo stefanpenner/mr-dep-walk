@@ -21,6 +21,10 @@ describe('.depsFromFile', function() {
       });
     });
 
+    afterEach(function() {
+      fs.removeSync(ROOT);
+    });
+
     it('extracts', function() {
       expect(depsFromFile(ROOT + 'es5/foo.js')).to.eql(['a', 'b/c']);
       expect(depsFromFile(ROOT + 'es5/a.js')).to.eql([]);
@@ -45,6 +49,10 @@ import y from 'b/c';`,
         },
         'd.js': `import foo from 'foo';`
       });
+    });
+
+    afterEach(function() {
+      fs.removeSync(ROOT);
     });
 
     it('extracts', function() {

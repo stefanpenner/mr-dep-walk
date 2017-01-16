@@ -21,6 +21,10 @@ describe('.depFilesFromFile', function() {
       });
     });
 
+    afterEach(function() {
+      fs.removeSync(ROOT);
+    });
+
     it('extracts', function() {
       expect(depFilesFromFile(ROOT + 'es5', { entry:'foo.js' })).to.eql([
         'a.js',
@@ -72,6 +76,10 @@ import y from 'b/c';`,
         },
         'd.js': `import foo from 'foo';`
       });
+    });
+
+    afterEach(function() {
+      fs.removeSync(ROOT);
     });
 
     it('extracts', function() {
