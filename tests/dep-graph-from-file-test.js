@@ -99,4 +99,22 @@ import y from 'b/c';`,
       ]);
     });
   });
+
+  describe('missing', function() {
+    beforeEach(function() {
+      fs.removeSync(ROOT);
+      fixturify.writeSync(ROOT + 'es6', {
+        'foo.js': `
+import x from 'a';
+import y from 'b/c';`,
+      });
+    });
+
+    it('extracts', function() {
+      expect(depFilesFromFile(ROOT + 'es6', { entry: 'foo.js' })).to.eql([
+        'a.js',
+        'b/c.js'
+      ]);
+    });
+  });
 });
