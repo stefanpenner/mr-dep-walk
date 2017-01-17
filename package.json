@@ -22,7 +22,7 @@
     "type": "git",
     "url": "git+https://github.com/stefanpenner/depwalk.git"
   },
-  "author": "Stefan Penner <stefan.penner@gmail.com>",
+  "author": "Stefan Penner <stefan.penner@gmail.com>, Edward Faulkner <ef@alum.mit.edu>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/stefanpenner/depwalk/issues"
