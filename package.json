@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "acorn": "^4.0.4",
-    "amd-name-resolver": "^0.0.6"
+    "amd-name-resolver": "^0.0.6",
+    "fs-extra": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
