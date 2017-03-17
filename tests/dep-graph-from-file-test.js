@@ -117,4 +117,48 @@ import y from 'b/c';`,
       ]);
     });
   });
+
+  describe('cwd', function() {
+    beforeEach(function() {
+      fs.removeSync(ROOT);
+      fixturify.writeSync(ROOT + 'cwd/foo', {
+        'foo.js': `
+import x from 'a';
+import y from 'b/c';`,
+        'a.js': ``,
+        'b': {
+          'c.js': `
+      import a from '../a';
+      import d from '../d';
+    `
+        },
+        'd.js': `import foo from 'foo';`
+      });
+    });
+
+    it('extracts', function() {
+      expect(depFilesFromFile(ROOT + 'cwd', { entry: 'foo.js', cwd: 'foo' })).to.eql([
+        'foo/a.js',
+        'foo/b/c.js',
+        'foo/d.js',
+        'foo/foo.js',
+      ]);
+
+      expect(depFilesFromFile(ROOT + 'cwd', { entry: 'a.js', cwd: 'foo' })).to.eql([]);
+
+      expect(depFilesFromFile(ROOT + 'cwd', { entry: 'b/c.js', cwd: 'foo' })).to.eql([
+        'foo/a.js',
+        'foo/d.js',
+        'foo/foo.js',
+        'foo/b/c.js',
+      ]);
+
+      expect(depFilesFromFile(ROOT + 'cwd', { entry: 'd.js', cwd: 'foo' })).to.eql([
+        'foo/foo.js',
+        'foo/a.js',
+        'foo/b/c.js',
+        'foo/d.js',
+      ]);
+    });
+  });
 });
