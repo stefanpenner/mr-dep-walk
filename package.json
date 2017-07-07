@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "acorn": "^4.0.4",
+    "acorn": "^5.1.1",
     "amd-name-resolver": "^0.0.6",
-    "fs-extra": "^2.0.0"
+    "fs-extra": "^3.0.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "eslint": "^4.1.1",
     "eslint-plugin-prettier": "^2.1.2",
     "fixturify": "^0.3.2",
@@ -23,7 +23,10 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "git add"]
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "name": "mr-dep-walk",
   "version": "1.2.0",
