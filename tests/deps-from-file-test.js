@@ -2,22 +2,22 @@
 
 const fixturify = require('fixturify');
 const fs = require('fs-extra');
-const ROOT = __dirname  + '/fixtures/';
+const ROOT = __dirname + '/fixtures/';
 
 const expect = require('chai').expect;
 const depsFromFile = require('../lib/deps-from-file');
 
 describe('.depsFromFile', function() {
   describe('ES5', function() {
-    beforeEach(function(){
+    beforeEach(function() {
       fs.removeSync(ROOT);
       fixturify.writeSync(ROOT + 'es5', {
         'foo.js': ` define('foo', ['a', 'b/c'], function() { });`,
         'a.js': `define('a', ['exports', 'require'], function() { })`,
-        'b': {
-          'c.js': `define('c', ['../a', '../d'], function() { })`
+        b: {
+          'c.js': `define('c', ['../a', '../d'], function() { })`,
         },
-        'd.js': `define('d', ['foo'], function() { })`
+        'd.js': `define('d', ['foo'], function() { })`,
       });
     });
 
@@ -37,13 +37,13 @@ describe('.depsFromFile', function() {
 import x from 'a';
 import y from 'b/c';`,
         'a.js': ``,
-        'b': {
+        b: {
           'c.js': `
       import a from '../a';
       import d from '../d';
-    `
+    `,
         },
-        'd.js': `import foo from 'foo';`
+        'd.js': `import foo from 'foo';`,
       });
     });
 

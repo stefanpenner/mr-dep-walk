@@ -2,27 +2,27 @@
 
 const fixturify = require('fixturify');
 const fs = require('fs-extra');
-const ROOT = __dirname  + '/fixtures/';
+const ROOT = __dirname + '/fixtures/';
 
 const expect = require('chai').expect;
 const depFilesFromFile = require('../lib/dep-files-from-file');
 
 describe('.depFilesFromFile', function() {
   describe('ES5', function() {
-    beforeEach(function(){
+    beforeEach(function() {
       fs.removeSync(ROOT);
       fixturify.writeSync(ROOT + 'es5', {
         'foo.js': ` define('foo', ['a', 'b/c'], function() { });`,
         'a.js': `define('a', ['exports', 'require'], function() { })`,
-        'b': {
-          'c.js': `define('c', ['../a', '../d'], function() { })`
+        b: {
+          'c.js': `define('c', ['../a', '../d'], function() { })`,
         },
-        'd.js': `define('d', ['foo'], function() { })`
+        'd.js': `define('d', ['foo'], function() { })`,
       });
     });
 
     it('extracts', function() {
-      expect(depFilesFromFile(ROOT + 'es5', { entry:'foo.js' })).to.eql([
+      expect(depFilesFromFile(ROOT + 'es5', { entry: 'foo.js' })).to.eql([
         'a.js',
         'b/c.js',
         'd.js',
@@ -47,12 +47,12 @@ describe('.depFilesFromFile', function() {
     });
 
     it('ignores external', function() {
-      expect(depFilesFromFile(ROOT + 'es5', {
-        entry: 'foo.js',
-        external: ['b/c'],
-      })).to.eql([
-        'a.js'
-      ]);
+      expect(
+        depFilesFromFile(ROOT + 'es5', {
+          entry: 'foo.js',
+          external: ['b/c'],
+        })
+      ).to.eql(['a.js']);
     });
   });
 
@@ -64,13 +64,13 @@ describe('.depFilesFromFile', function() {
 import x from 'a';
 import y from 'b/c';`,
         'a.js': ``,
-        'b': {
+        b: {
           'c.js': `
       import a from '../a';
       import d from '../d';
-    `
+    `,
         },
-        'd.js': `import foo from 'foo';`
+        'd.js': `import foo from 'foo';`,
       });
     });
 
@@ -113,7 +113,7 @@ import y from 'b/c';`,
     it('extracts', function() {
       expect(depFilesFromFile(ROOT + 'es6', { entry: 'foo.js' })).to.eql([
         'a.js',
-        'b/c.js'
+        'b/c.js',
       ]);
     });
   });
@@ -126,39 +126,32 @@ import y from 'b/c';`,
 import x from 'a';
 import y from 'b/c';`,
         'a.js': ``,
-        'b': {
+        b: {
           'c.js': `
       import a from '../a';
       import d from '../d';
-    `
+    `,
         },
-        'd.js': `import foo from 'foo';`
+        'd.js': `import foo from 'foo';`,
       });
     });
 
     it('extracts', function() {
-      expect(depFilesFromFile(ROOT + 'cwd', { entry: 'foo.js', cwd: 'foo' })).to.eql([
-        'foo/a.js',
-        'foo/b/c.js',
-        'foo/d.js',
-        'foo/foo.js',
-      ]);
+      expect(
+        depFilesFromFile(ROOT + 'cwd', { entry: 'foo.js', cwd: 'foo' })
+      ).to.eql(['foo/a.js', 'foo/b/c.js', 'foo/d.js', 'foo/foo.js']);
 
-      expect(depFilesFromFile(ROOT + 'cwd', { entry: 'a.js', cwd: 'foo' })).to.eql([]);
+      expect(
+        depFilesFromFile(ROOT + 'cwd', { entry: 'a.js', cwd: 'foo' })
+      ).to.eql([]);
 
-      expect(depFilesFromFile(ROOT + 'cwd', { entry: 'b/c.js', cwd: 'foo' })).to.eql([
-        'foo/a.js',
-        'foo/d.js',
-        'foo/foo.js',
-        'foo/b/c.js',
-      ]);
+      expect(
+        depFilesFromFile(ROOT + 'cwd', { entry: 'b/c.js', cwd: 'foo' })
+      ).to.eql(['foo/a.js', 'foo/d.js', 'foo/foo.js', 'foo/b/c.js']);
 
-      expect(depFilesFromFile(ROOT + 'cwd', { entry: 'd.js', cwd: 'foo' })).to.eql([
-        'foo/foo.js',
-        'foo/a.js',
-        'foo/b/c.js',
-        'foo/d.js',
-      ]);
+      expect(
+        depFilesFromFile(ROOT + 'cwd', { entry: 'd.js', cwd: 'foo' })
+      ).to.eql(['foo/foo.js', 'foo/a.js', 'foo/b/c.js', 'foo/d.js']);
     });
   });
 });

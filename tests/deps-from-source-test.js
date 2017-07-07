@@ -15,7 +15,7 @@ describe('.depsFromSource', function() {
       expect(depsFromSrouce(A)).to.eql([]);
       expect(depsFromSrouce(C)).to.eql(['../a', '../d']);
       expect(depsFromSrouce(D)).to.eql(['foo']);
-    })
+    });
   });
 
   describe('ES6', function() {
@@ -35,25 +35,28 @@ import y from 'b/c';`;
       expect(depsFromSrouce(A)).to.eql([]);
       expect(depsFromSrouce(C)).to.eql(['../a', '../d']);
       expect(depsFromSrouce(D)).to.eql(['foo']);
-    })
+    });
   });
-
 
   describe('ES mixed', function() {
     it('define then es6', function() {
-      expect(depsFromSrouce(`
+      expect(
+        depsFromSrouce(`
 define('foo', ['bar'], function() { });
 import x from 'a';
 import y from 'b/c';
-      `)).to.eql(['bar']);
+      `)
+      ).to.eql(['bar']);
     });
 
     it('es6 then define', function() {
-      expect(depsFromSrouce(`
+      expect(
+        depsFromSrouce(`
 import x from 'a';
 import y from 'b/c';
 define('foo', ['bar'], function() { });
-      `)).to.eql(['a', 'b/c']);
+      `)
+      ).to.eql(['a', 'b/c']);
     });
   });
 });
