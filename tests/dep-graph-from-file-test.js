@@ -7,6 +7,8 @@ const ROOT = __dirname + '/fixtures/';
 const expect = require('chai').expect;
 const depFilesFromFile = require('../lib/dep-files-from-file');
 
+const acorn = require('acorn');
+
 describe('.depFilesFromFile', function() {
   describe('ES5', function() {
     beforeEach(function() {
@@ -152,6 +154,35 @@ import y from 'b/c';`,
       expect(
         depFilesFromFile(ROOT + 'cwd', { entry: 'd.js', cwd: 'foo' })
       ).to.eql(['foo/foo.js', 'foo/a.js', 'foo/b/c.js', 'foo/d.js']);
+    });
+  });
+
+  describe('pluggable parser', function() {
+    beforeEach(function() {
+      fs.removeSync(ROOT);
+      fixturify.writeSync(ROOT + 'es5', {
+        'foo.js': ` define('foo', ['a', 'b/c'], function() { });`,
+        'a.js': `define('a', ['exports', 'require'], function() { })`,
+        b: {
+          'c.js': `define('c', ['../a', '../d'], function() { })`,
+        },
+        'd.js': `define('d', ['foo'], function() { })`,
+      });
+    });
+
+    it('ensures the new parser is used', function() {
+      let parseCalled = 0;
+      expect(
+        depFilesFromFile(ROOT + 'es5', {
+          entry: 'foo.js',
+          parse(source) {
+            parseCalled++;
+            return acorn.parse(source);
+          },
+        })
+      ).to.eql(['a.js', 'b/c.js', 'd.js', 'foo.js']);
+
+      expect(parseCalled).to.eql(5);
     });
   });
 });
