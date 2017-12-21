@@ -47,8 +47,17 @@ depsFromFile({
 ```
 
 
-For 'depsFromSource` given the raw source, it will produce a list of its immediate dependent moduleNames;
+For `depsFromSource` given the raw source, it will produce a list of its immediate dependent moduleNames;
 
 ```js
 depsFromSource(`import x from 'y'`); // => 'y'
+```
+
+For `depsFromAST` given the AST, it will produce a list of its immediate dependent moduleNames;
+
+```js
+depsFromSource(acorn.parse(`import x from 'y'`, {
+  ecmacVersion: 8,
+  sourceType: 'module'
+})); // => 'y'
 ```
