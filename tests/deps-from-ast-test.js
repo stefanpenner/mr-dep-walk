@@ -2,13 +2,10 @@
 
 const expect = require('chai').expect;
 const depsFromAST = require('../lib/deps-from-ast');
-const acorn = require('acorn');
+const defaultParser = require('../lib/default-parser');
 
 function toAST(source) {
-  return acorn.parse(source, {
-    ecmaVersion: 8,
-    sourceType: 'module',
-  });
+  return defaultParser(source);
 }
 
 describe('.depsFromAST', function() {

@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 const depsFromSrouce = require('../lib/deps-from-source');
-const acorn = require('acorn');
+const defaultParser = require('../lib/default-parser');
 
 describe('.depsFromSource', function() {
   describe('ES5', function() {
@@ -73,10 +73,7 @@ import y from 'b/c';
           {
             parse(source) {
               parseCount++;
-              return acorn.parse(source, {
-                ecmaVersion: 8,
-                sourceType: 'module',
-              });
+              return defaultParser(source);
             },
           }
         )

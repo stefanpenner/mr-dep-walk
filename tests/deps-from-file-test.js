@@ -6,7 +6,7 @@ const ROOT = __dirname + '/fixtures/';
 
 const expect = require('chai').expect;
 const depsFromFile = require('../lib/deps-from-file');
-const acorn = require('acorn');
+const defaultParser = require('../lib/default-parser');
 
 describe('.depsFromFile', function() {
   describe('ES5', function() {
@@ -78,10 +78,7 @@ import y from 'b/c';`,
         depsFromFile(ROOT + 'es6/foo.js', {
           parse(source) {
             parseCount++;
-            return acorn.parse(source, {
-              ecmaVersion: 8,
-              sourceType: 'module',
-            });
+            return defaultParser(source);
           },
         })
       ).to.eql(['a', 'b/c']);
