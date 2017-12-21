@@ -2,6 +2,7 @@
 
 const expect = require('chai').expect;
 const depsFromSrouce = require('../lib/deps-from-source');
+const acorn = require('acorn');
 
 describe('.depsFromSource', function() {
   describe('ES5', function() {
@@ -57,6 +58,31 @@ import y from 'b/c';
 define('foo', ['bar'], function() { });
       `)
       ).to.eql(['a', 'b/c']);
+    });
+  });
+
+  describe('pluggable parse', function() {
+    it('provide alternative parser', function() {
+      let parseCount = 0;
+      expect(
+        depsFromSrouce(
+          `
+import x from 'a';
+import y from 'b/c';
+      `,
+          {
+            parse(source) {
+              parseCount++;
+              return acorn.parse(source, {
+                ecmaVersion: 8,
+                sourceType: 'module',
+              });
+            },
+          }
+        )
+      ).to.eql(['a', 'b/c']);
+
+      expect(parseCount).to.eql(1);
     });
   });
 });

@@ -26,7 +26,8 @@ import x from 'y';
 ```js
 depFilesFromFile({
   entry: 'file.js',
-  cwd: '' /* optional */
+  /* cwd: optional, */
+  /* parse: optional,  */
 }); // => 'y.js';
 ```
 
@@ -42,22 +43,43 @@ import x from 'y';
 ```js
 depsFromFile({
   entry: 'file.js',
-  cwd: '' /* optional */
+  /* cwd: optional, */
+  /* parse: optional,  */
 }); // => 'y';
 ```
-
 
 For `depsFromSource` given the raw source, it will produce a list of its immediate dependent moduleNames;
 
 ```js
-depsFromSource(`import x from 'y'`); // => 'y'
+depsFromSource(`import x from 'y'`/*, options */); // => 'y'
 ```
 
 For `depsFromAST` given the AST, it will produce a list of its immediate dependent moduleNames;
 
 ```js
 depsFromSource(acorn.parse(`import x from 'y'`, {
-  ecmacVersion: 8,
+  ecmaVersion: 8,
   sourceType: 'module'
 })); // => 'y'
+```
+
+
+### Custom Parse Step
+
+By default mr-dep-walk will use:
+
+```js
+source => acorn.parse(source, { ecmaVersion: 8, sourceType: 'module'})
+```
+
+But some methods (`depFilesFromFile`, `depsFromFile`, `depsFromSource`) support
+an alt-parser, example:
+
+```js
+depFilesFromFile('some-file.js', {
+  entry: 'foo.js',
+  parse(source) {
+    return customParser(source);
+  },
+});
 ```
