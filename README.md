@@ -12,7 +12,12 @@ yarn add mr-dep-walk
 ```
 
 ```js
-const { depFilesFromFile, depsFromFile, depsFromSrouce } = require('mr-dep-walk');
+const {
+  depFilesFromFile,
+  depsFromFile,
+  depsFromSource,
+  depsFromAST
+} = require('mr-dep-walk');
 ```
 
 For `depFilesFromFile` given an entry file, it will produce a list of all dependent files (recursively):
