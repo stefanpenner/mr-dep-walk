@@ -43,7 +43,19 @@ import y from 'b/c';`);
     });
   });
 
-  describe('ES mixed', function() {
+  describe('Compact Re-exports', function() {
+    it('extracts dep', function() {
+      const FOO = toAST(`;define.alias('foo', 'bar');`);
+      expect(depsFromAST(FOO)).to.eql(['foo']);
+    });
+
+    it('does not choke on other stuff', function() {
+      const FOO = toAST(`randomGlobalInvocation();myObject.method();`);
+      expect(depsFromAST(FOO)).to.eql([]);
+    });
+  });
+
+  describe('ES mixed with CR', function() {
     it('define then es6', function() {
       expect(
         depsFromAST(
@@ -51,6 +63,7 @@ import y from 'b/c';`);
 define('foo', ['bar'], function() { });
 import x from 'a';
 import y from 'b/c';
+;define.alias('foo', 'bar');
       `)
         )
       ).to.eql(['bar']);
@@ -63,9 +76,23 @@ import y from 'b/c';
 import x from 'a';
 import y from 'b/c';
 define('foo', ['bar'], function() { });
+;define.alias('foo', 'bar');
       `)
         )
       ).to.eql(['a', 'b/c']);
     });
+  });
+
+  it('CR then ES', function() {
+    expect(
+      depsFromAST(
+        toAST(`
+;define.alias('foo', 'bar');
+import x from 'a';
+import y from 'b/c';
+define('foo', ['bar'], function() { });
+      `)
+      )
+    ).to.eql(['foo']);
   });
 });
